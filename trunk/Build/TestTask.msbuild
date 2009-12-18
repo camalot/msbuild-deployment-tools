@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5" DefaultTargets="Build">
+	<Import Project="..\bin\Debug\1.0.0.0\Binary\x86\MSBuild.Deployment.Tasks.Targets"/>
+
+	<Target Name="Build">
+
+	</Target>
+
+	<Target Name="CodePlexRelease">
+		<CodePlexCreateRelease
+				Project=""
+				Username=""
+				Password=""
+				ProjectFriendlyName="MSBuild Deployment Tasks - Ignore"
+				Version="0.0.0.1"
+				
+				Description="Testing Creating Release"
+				IsDefaultRelease="false"
+				IsShownToPublic="false"
+				Status="Beta"
+				ReleaseDate="12/18/2009"
+				/>
+	</Target>
+
+	<Target Name="GoogleCodeRelease">
+		<GoogleCodeUpload
+			Project=""
+			Username=""
+			Password=""
+			Summary="Test File, Ignore it."
+			File="$(MSBuildProjectFile)"
+			Labels="test;ignore"/>
+	</Target>
+</Project>

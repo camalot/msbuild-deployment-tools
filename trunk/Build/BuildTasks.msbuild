@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5" DefaultTargets="Build">
+	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" Condition="'$(MSBuildCommunityTasksPath)' == ''"/>
+
+	<PropertyGroup>
+		<ReleaseMode Condition=" '$(ReleaseMode)' == '' ">Zip</ReleaseMode>
+		<CCNetLabel Condition="'$(CCNetLabel)' == ''">1.0.0.0</CCNetLabel>
+
+		<Configuration Condition="'$(CCNetBuildCondition)' == 'ForceBuild'">Release</Configuration>
+		<Configuration Condition="'$(CCNetBuildCondition)' != 'ForceBuild'">Debug</Configuration>
+
+		<Platform Condition="'$(Platform)' == 'AnyCPU' OR '$(Platform)' == ''">x86</Platform>
+		<ReleasePlatform>$(Platform)</ReleasePlatform>
+
+		<PlatformConstant Condition=" '$(Platform)' == 'x86' ">PLATFORMX86</PlatformConstant>
+		<PlatformConstant Condition=" '$(Platform)' == 'x64' ">PLATFORMX64</PlatformConstant>
+		<PlatformConstant Condition=" '$(Platform)' == 'ia64' ">PLATFORMIA64</PlatformConstant>
+		<PlatformConstant Condition=" '$(PlatformConstant)' == '' ">PLATFORMX86</PlatformConstant>
+
+		<CCNetArtifactDirectory Condition="'$(CCNetArtifactDirectory)' == ''">$(MSBuildProjectDirectory)\..\bin\</CCNetArtifactDirectory>
+		<CCNetWorkingDirectory Condition="'$(CCNetWorkingDirectory)' == ''">$(MSBuildProjectDirectory)\..\</CCNetWorkingDirectory>
+		<CCNetProject Condition="'$(CCNetProject)' == ''">MSBuild.Deployment.Tasks</CCNetProject>
+		<CleanBuildOutput>True</CleanBuildOutput>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<BuildAllDependsOn>AssemblyInfo;CleanBuild;ReleaseCleanup</BuildAllDependsOn>
+		<CompileDependsOn>$(CompileDependsOn)</CompileDependsOn>
+		<OutputPath>$(CCNetArtifactDirectory)$(Configuration)\$(CCNetLabel)\$(ReleaseMode)\$(ReleasePlatform)\</OutputPath>
+		<MSBuildProperties>ReleasePlatform=$(ReleasePlatform);ReleaseMode=$(ReleaseMode);SignAssemblies=$(SignAssemblies);Configuration=$(Configuration);OutputPath=$(OutputPath);CCNetLabel=$(CCNetLabel);CCNetIntegrationStatus=$(CCNetIntegrationStatus);CCNetBuildCondition=$(CCNetBuildCondition);CCNetProject=$(CCNetProject);CCNetBuildDate=$(CCNetBuildDate);CCNetLastIntegrationStatus=$(CCNetLastIntegrationStatus);CCNetBuildTime=$(CCNetBuildTime);CCNetArtifactDirectory=$(CCNetArtifactDirectory);CCNetWorkingDirectory=$(CCNetWorkingDirectory);CCNetRequestSource=$(CCNetRequestSource)</MSBuildProperties>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectsToBuild Include="$(CCNetWorkingDirectory)**\*.csproj" />
+		<InstallProjectToBuild Include="$(CCNetWorkingDirectory)**\*.wix.msbuild" />
+	</ItemGroup>
+
+
+
+	<Target Name="Build" DependsOnTargets="AssemblyInfo;CleanBuild;CreateSchema;ReleaseCleanup">
+	</Target>
+
+	<Target Name="CleanBuild">
+		<RemoveDir Directories="$(OutputPath)" Condition="Exists('$(OutputPath)')" ContinueOnError="true" />
+		<MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
+	</Target>
+
+	<Target Name="CoreBuild">
+		<MSBuild Projects ="@(ProjectsToBuild)" ContinueOnError="false"
+						 Properties="$(MSBuildProperties)">
+			<Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
+		</MSBuild>
+	</Target>
+
+	<Target Name="CreateSchema" DependsOnTargets="CoreBuild">
+		
+		<TaskSchema Assemblies="$(OutputPath)MSBuild.Deployment.Tasks.dll"
+							OutputPath="$(OutputPath)"
+							CreateTaskList="true"
+							IgnoreMsBuildSchema="true"
+							Includes="Microsoft.Build.Commontypes.xsd"/>
+
+	</Target>
+
+	<!-- Zips releases up -->
+	<Target Name="ZipRelease" Condition=" '$(ReleaseMode)' != 'Binary' ">
+		<CreateItem Include="$(OutputPath)**\*.*" Exclude="$(OutputPath)*.zip;$(OutputPath)*.vshost.*;$(OutputPath)*.msi;$(OutputPath)*.wixpdb">
+			<Output ItemName="ZipFiles" TaskParameter="Include" />
+		</CreateItem>
+
+		<Zip Comment="$(CCNetBuildDate) $(CCNetBuildTime) $(CCNetProject) version $(CCNetLabel)" Files="@(ZipFiles);@(AndroidTools)"
+				 WorkingDirectory="$(OutputPath)"
+				 ZipFileName="$(OutputPath)$(CCNetProject).$(CCNetLabel).$(Platform).zip" ZipLevel="9" Flatten="False" />
+	</Target>
+
+	<Target Name="BuildInstall" DependsOnTargets="CopyLicenseFiles">
+		<MSBuild Projects="@(InstallProjectToBuild)"
+						 Properties="Configuration=$(Configuration);Platform=$(Platform);OutputPath=$(OutputPath);CCNetLabel=$(CCNetLabel);CCNetIntegrationStatus=$(CCNetIntegrationStatus);CCNetBuildCondition=$(CCNetBuildCondition);CCNetProject=$(CCNetProject);CCNetBuildDate=$(CCNetBuildDate);CCNetLastIntegrationStatus=$(CCNetLastIntegrationStatus);CCNetBuildTime=$(CCNetBuildTime);CCNetArtifactDirectory=$(CCNetArtifactDirectory);CCNetWorkingDirectory=$(CCNetWorkingDirectory);CCNetRequestSource=$(CCNetRequestSource)">
+			<Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
+		</MSBuild>
+	</Target>
+
+	<Target Name="ReleaseCleanup" DependsOnTargets="ZipRelease" Condition=" '$(ReleaseMode)' != 'Binary' ">
+		<CreateItem Include="$(OutputPath)*.*" Exclude="$(OutputPath)*.msi;$(OutputPath)*.zip;$(OutputPath)*.vshost.*">
+			<Output ItemName="Files" TaskParameter="Include"/>
+		</CreateItem>
+
+		<CreateItem Include="$(OutputPath)**\*" Exclude="$(OutputPath)*.*">
+			<Output ItemName="SubFiles" TaskParameter="Include"/>
+		</CreateItem>
+
+		<CreateItem Include="%(SubFiles.RelativeDir)" Exclude="%(OutputDirectory.FullPath)">
+			<Output TaskParameter="Include" ItemName="Folders"/>
+		</CreateItem>
+
+		<RemoveDir Directories="%(Folders.FullPath)" ContinueOnError="true" />
+		<Delete Files="@(Files);@(AndroidTools)" ContinueOnError="true" />
+	</Target>
+
+
+	<Target Name="AssemblyInfo"
+					Outputs="$(MSBuildProjectDirectory)\..\Shared\AssemblyVersionInfo.cs"
+					Condition=" '$(CCNetLabel)' != '' ">
+
+		<AssemblyInfo CodeLanguage="CS"
+									AssemblyFileVersion="$(CCNetLabel)"
+									AssemblyVersion="$(CCNetLabel)"
+									OutputFile="$(MSBuildProjectDirectory)\..\Shared\AssemblyVersionInfo.cs"
+									/>
+	</Target>
+</Project>

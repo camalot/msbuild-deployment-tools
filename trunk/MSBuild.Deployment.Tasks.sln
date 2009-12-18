@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuild.Deployment.Tasks", "MSBuild.Deployment.Tasks\MSBuild.Deployment.Tasks.csproj", "{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{153BD958-E0B7-4E4D-9829-9C22FEA49323}"
+	ProjectSection(SolutionItems) = preProject
+		Build\BuildTasks.msbuild = Build\BuildTasks.msbuild
+		Build\TestTask.msbuild = Build\TestTask.msbuild
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rdParty", "3rdParty", "{9EDF4B45-EAB2-4DCA-8692-40787BC018A9}"
+	ProjectSection(SolutionItems) = preProject
+		3rdParty\CodePlex.ReleaseService.config = 3rdParty\CodePlex.ReleaseService.config
+		3rdParty\CodePlex.ReleaseService.cs = 3rdParty\CodePlex.ReleaseService.cs
+		3rdParty\CodePlex.ReleaseService.wsdl = 3rdParty\CodePlex.ReleaseService.wsdl
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{FD03EC73-07E3-48E7-BA20-296495AB37F7}"
+	ProjectSection(SolutionItems) = preProject
+		Shared\AssemblyVersionInfo.cs = Shared\AssemblyVersionInfo.cs
+		Shared\license.rtf = Shared\license.rtf
+		Shared\License.txt = Shared\License.txt
+		Shared\SharedAssemblyInfo.cs = Shared\SharedAssemblyInfo.cs
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs02.codeplex.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = MSBuild.Deployment.Tasks\\MSBuild.Deployment.Tasks.csproj
+		SccProjectName1 = MSBuild.Deployment.Tasks
+		SccLocalPath1 = MSBuild.Deployment.Tasks
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Debug|x64.ActiveCfg = Debug|x64
+		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Debug|x86.ActiveCfg = Debug|x86
+		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Debug|x86.Build.0 = Debug|x86
+		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Release|Any CPU.ActiveCfg = Release|x86
+		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Release|x64.ActiveCfg = Release|x64
+		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
