@@ -26,6 +26,7 @@ namespace MSBuild.Deployment.Tasks {
 		private const string BASEURL = "https://{0}.googlecode.com/files";
 		public GoogleCodeUpload ( ) {
 			ProxyPort = 8080;
+			Timeout = 5 * 60;
 		}
 
 		/// <summary>
@@ -90,6 +91,12 @@ namespace MSBuild.Deployment.Tasks {
 		/// <value>The proxy password.</value>
 		public string ProxyPassword { get; set; }
 
+		/// <summary>
+		/// Gets or sets the timeout in seconds.
+		/// </summary>
+		/// <value>The timeout in seconds.</value>
+		public int Timeout { get; set; }
+
 
 		/// <summary>
 		/// Executes this instance.
@@ -143,8 +150,9 @@ namespace MSBuild.Deployment.Tasks {
 			HttpWebRequest req = HttpWebRequest.Create ( String.Format ( BASEURL, Project ) ) as HttpWebRequest;
 			req.Method = "POST";
 			req.ContentType = String.Concat ( "multipart/form-data; boundary=" + BOUNDARY );
-			req.UserAgent = String.Format ( "MSBuild Deployment Tasks (GoogleCodeUploadTask) {0}", Assembly.GetExecutingAssembly ( ).GetName ( ).Version.ToString ( ) );
+			req.UserAgent = String.Format ( "MSBuild Deployment Tasks (GoogleCodeUpload) {0}", Assembly.GetExecutingAssembly ( ).GetName ( ).Version.ToString ( ) );
 			req.Headers.Add ( "Authorization", String.Format ( "Basic {0}", CreateAuthorizationToken ( Username, Password ) ) );
+			req.Timeout = Timeout * 1000;
 
 			if ( !string.IsNullOrEmpty ( ProxyHost ) ) {
 				WebProxy proxy = new WebProxy ( ProxyHost, ProxyPort );

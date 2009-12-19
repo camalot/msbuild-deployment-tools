@@ -18,8 +18,24 @@
 				IsDefaultRelease="false"
 				IsShownToPublic="false"
 				Status="Beta"
-				ReleaseDate="12/18/2009"
-				/>
+				ReleaseDate="12/18/2009">
+			<Output PropertyName="ReleaseId" TaskParameter="ReleaseId"/>
+			<Output PropertyName="ReleaseName" TaskParameter="ReleaseName"/>
+		</CodePlexCreateRelease>
+
+		<CodePlexUpload
+				Project=""
+				Username=""
+				Password=""
+				ReleaseName="$(ReleaseName)"
+				File="$(MSBuildProjectFile)"/>
+
+		<CodePlexUpload
+				Project=""
+				Username=""
+				Password=""
+				ReleaseName="$(ReleaseName)"
+				File="$(MSBuildProjectDirectory)\BuildTasks.msbuild"/>
 	</Target>
 
 	<Target Name="GoogleCodeRelease">

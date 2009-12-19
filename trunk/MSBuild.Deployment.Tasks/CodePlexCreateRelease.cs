@@ -7,6 +7,7 @@ using Microsoft.Build.Framework;
 using MSBuild.Deployment.Tasks.Services;
 using System.Net;
 using System.ServiceModel.Channels;
+using System.Reflection;
 
 namespace MSBuild.Deployment.Tasks {
 	/// <summary>
@@ -41,6 +42,7 @@ namespace MSBuild.Deployment.Tasks {
 			IsShownToPublic = false;
 			IsDefaultRelease = false;
 			ProxyPort = 8080;
+			Timeout = 60;
 		}
 
 		/// <summary>
@@ -88,7 +90,8 @@ namespace MSBuild.Deployment.Tasks {
 		/// Gets or sets the name.
 		/// </summary>
 		/// <value>The name.</value>
-		private string ReleaseName {
+		[Output]
+		public string ReleaseName {
 			get {
 				return string.Format ( "{0} {1} {2}", ProjectFriendlyName, Version, ReleaseStatus.ToString ( ) );
 			}
@@ -130,6 +133,19 @@ namespace MSBuild.Deployment.Tasks {
 		public DateTime ReleaseDate { get; set; }
 
 		/// <summary>
+		/// Gets or sets the release id.
+		/// </summary>
+		/// <value>The release id.</value>
+		[Output]
+		public int ReleaseId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the timeout in seconds.
+		/// </summary>
+		/// <value>The timeout in seconds.</value>
+		public int Timeout { get; set; }
+
+		/// <summary>
 		/// Executes this instance.
 		/// </summary>
 		/// <returns></returns>
@@ -157,8 +173,9 @@ namespace MSBuild.Deployment.Tasks {
 
 				ReleaseStatus = (DevelopmentStatus)Enum.Parse ( typeof ( DevelopmentStatus ), Status );
 
+				Log.LogMessage ( "Creating Release" );
 				CreateRelease ( );
-				Log.LogMessage ( "Successfully created release: {0}", ReleaseName );
+				Log.LogMessage ( "Successfully created release: {0} ({1})", ReleaseName, ReleaseId );
 				return true;
 			} catch ( Exception ex ) {
 				Log.LogError ( ex.ToString ( ) );
@@ -167,25 +184,19 @@ namespace MSBuild.Deployment.Tasks {
 		}
 
 		private void CreateRelease ( ) {
-			Binding binding;
+			ReleaseService service = new ReleaseService ( );
+			service.UserAgent = String.Format ( "MSBuild Deployment Tasks (CodePlexCreateRelease) {0}", Assembly.GetExecutingAssembly ( ).GetName ( ).Version.ToString ( ) );
+			service.Timeout = Timeout * 1000;
 
-			if ( !string.IsNullOrEmpty ( ProxyHost ) ) {
-				binding = CodePlexServiceBindings.CreateBinding ( ProxyHost, ProxyPort );
-			} else {
-				binding = CodePlexServiceBindings.CreateBinding ( );
+			if ( !string.IsNullOrEmpty(ProxyHost) ) {
+				service.Proxy = new WebProxy ( ProxyHost, ProxyPort );
+				( service.Proxy as WebProxy ).BypassProxyOnLocal = true;
+				if ( !string.IsNullOrEmpty ( ProxyUser ) ) {
+					service.Proxy.Credentials = new NetworkCredential ( ProxyUser, ProxyPassword );
+				}
 			}
 
-			ReleaseServiceSoapClient releaseService = new ReleaseServiceSoapClient ( binding, CodePlexServiceBindings.CreateEndpoint ( ) );
-			
-			releaseService.ClientCredentials.SupportInteractive = false;
-
-			if ( !string.IsNullOrEmpty ( ProxyHost ) ) {
-				Log.LogMessage ( "Setting Proxy Username: {0}",ProxyUser );
-				releaseService.ClientCredentials.UserName.Password = ProxyPassword;
-				releaseService.ClientCredentials.UserName.UserName = ProxyUser;
-			}
-
-			releaseService.CreateRelease ( Project, ReleaseName,
+			ReleaseId = service.CreateARelease ( Project, ReleaseName,
 				Description, ReleaseDate.ToString ( "MM/dd/yyyy" ), Status.ToString ( ),
 				IsShownToPublic, IsDefaultRelease, Username, Password );
 		}

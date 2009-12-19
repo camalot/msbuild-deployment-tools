@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rdParty", "3rdParty", "{9E
 		3rdParty\CodePlex.ReleaseService.config = 3rdParty\CodePlex.ReleaseService.config
 		3rdParty\CodePlex.ReleaseService.cs = 3rdParty\CodePlex.ReleaseService.cs
 		3rdParty\CodePlex.ReleaseService.wsdl = 3rdParty\CodePlex.ReleaseService.wsdl
+		3rdParty\CodePlexApi.cs = 3rdParty\CodePlexApi.cs
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{FD03EC73-07E3-48E7-BA20-296495AB37F7}"

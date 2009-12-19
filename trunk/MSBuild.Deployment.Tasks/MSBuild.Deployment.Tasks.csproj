@@ -67,12 +67,14 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -83,8 +85,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\3rdParty\CodePlex.ReleaseService.cs">
-      <Link>Services\CodePlex.ReleaseService.cs</Link>
+    <Compile Include="..\3rdParty\CodePlexApi.cs">
+      <Link>Services\CodePlexApi.cs</Link>
     </Compile>
     <Compile Include="..\Shared\AssemblyVersionInfo.cs" Condition="Exists('..\Shared\AssemblyVersionInfo.cs')">
       <Link>Properties\AssemblyVersionInfo.cs</Link>
@@ -93,6 +95,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CodePlexCreateRelease.cs" />
+    <Compile Include="CodePlexUpload.cs" />
     <Compile Include="GoogleCodeUpload.cs" />
     <Compile Include="IProxyTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -100,6 +103,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
