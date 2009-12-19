@@ -1,32 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5" DefaultTargets="Build">
 	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" Condition="'$(MSBuildCommunityTasksPath)' == ''"/>
+	<Import Project="$(MSBuildProjectDirectory)\SharedProperties.msbuild" Condition="Exists('$(MSBuildProjectDirectory)\SharedProperties.msbuild') AND '$(SharedProperties)' != 'SharedProperties' " />
 
-	<PropertyGroup>
-		<ReleaseMode Condition=" '$(ReleaseMode)' == '' ">Zip</ReleaseMode>
-		<CCNetLabel Condition="'$(CCNetLabel)' == ''">1.0.0.0</CCNetLabel>
-
-		<Configuration Condition="'$(CCNetBuildCondition)' == 'ForceBuild'">Release</Configuration>
-		<Configuration Condition="'$(CCNetBuildCondition)' != 'ForceBuild'">Debug</Configuration>
-
-		<Platform Condition="'$(Platform)' == 'AnyCPU' OR '$(Platform)' == ''">x86</Platform>
-		<ReleasePlatform>$(Platform)</ReleasePlatform>
-
-		<PlatformConstant Condition=" '$(Platform)' == 'x86' ">PLATFORMX86</PlatformConstant>
-		<PlatformConstant Condition=" '$(Platform)' == 'x64' ">PLATFORMX64</PlatformConstant>
-		<PlatformConstant Condition=" '$(Platform)' == 'ia64' ">PLATFORMIA64</PlatformConstant>
-		<PlatformConstant Condition=" '$(PlatformConstant)' == '' ">PLATFORMX86</PlatformConstant>
-
-		<CCNetArtifactDirectory Condition="'$(CCNetArtifactDirectory)' == ''">$(MSBuildProjectDirectory)\..\bin\</CCNetArtifactDirectory>
-		<CCNetWorkingDirectory Condition="'$(CCNetWorkingDirectory)' == ''">$(MSBuildProjectDirectory)\..\</CCNetWorkingDirectory>
-		<CCNetProject Condition="'$(CCNetProject)' == ''">MSBuild.Deployment.Tasks</CCNetProject>
-		<CleanBuildOutput>True</CleanBuildOutput>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<BuildAllDependsOn>AssemblyInfo;CleanBuild;ReleaseCleanup</BuildAllDependsOn>
-		<CompileDependsOn>$(CompileDependsOn)</CompileDependsOn>
-		<OutputPath>$(CCNetArtifactDirectory)$(Configuration)\$(CCNetLabel)\$(ReleaseMode)\$(ReleasePlatform)\</OutputPath>
-		<MSBuildProperties>ReleasePlatform=$(ReleasePlatform);ReleaseMode=$(ReleaseMode);SignAssemblies=$(SignAssemblies);Configuration=$(Configuration);OutputPath=$(OutputPath);CCNetLabel=$(CCNetLabel);CCNetIntegrationStatus=$(CCNetIntegrationStatus);CCNetBuildCondition=$(CCNetBuildCondition);CCNetProject=$(CCNetProject);CCNetBuildDate=$(CCNetBuildDate);CCNetLastIntegrationStatus=$(CCNetLastIntegrationStatus);CCNetBuildTime=$(CCNetBuildTime);CCNetArtifactDirectory=$(CCNetArtifactDirectory);CCNetWorkingDirectory=$(CCNetWorkingDirectory);CCNetRequestSource=$(CCNetRequestSource)</MSBuildProperties>
-	</PropertyGroup>
+	<Import Project="$(MSBuildProjectDirectory)\Publish.msbuild" Condition="Exists('$(MSBuildProjectDirectory)\Publish.msbuild') AND '$(PublishTarget)' != 'PublishTarget' " />
 
 	<ItemGroup>
 		<ProjectsToBuild Include="$(CCNetWorkingDirectory)**\*.csproj" />
@@ -35,7 +12,12 @@
 
 
 
-	<Target Name="Build" DependsOnTargets="AssemblyInfo;CleanBuild;CreateSchema;ReleaseCleanup">
+	<Target Name="Build" DependsOnTargets="AssemblyInfo;CleanBuild;CreateSchema;ReleaseCleanup;BuildPublish">
+	</Target>
+
+	<Target Name="BuildPublish" Condition=" '$(PublishTarget)' == 'PublishTarget' AND  '$(ReleaseMode)' != 'Binary'">
+		<Message Text="Publishing Build" Importance="high" />
+		<CallTarget Targets="Publish" />
 	</Target>
 
 	<Target Name="CleanBuild">

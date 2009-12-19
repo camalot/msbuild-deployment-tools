@@ -6,6 +6,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{153BD958-E0B7-4E4D-9829-9C22FEA49323}"
 	ProjectSection(SolutionItems) = preProject
 		Build\BuildTasks.msbuild = Build\BuildTasks.msbuild
+		Build\SharedProperties.msbuild = Build\SharedProperties.msbuild
 		Build\TestTask.msbuild = Build\TestTask.msbuild
 	EndProjectSection
 EndProject
