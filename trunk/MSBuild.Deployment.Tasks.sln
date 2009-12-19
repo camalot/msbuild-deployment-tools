@@ -19,7 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rdParty", "3rdParty", "{9E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{FD03EC73-07E3-48E7-BA20-296495AB37F7}"
 	ProjectSection(SolutionItems) = preProject
-		Shared\AssemblyVersionInfo.cs = Shared\AssemblyVersionInfo.cs
 		Shared\license.rtf = Shared\license.rtf
 		Shared\License.txt = Shared\License.txt
 		Shared\SharedAssemblyInfo.cs = Shared\SharedAssemblyInfo.cs

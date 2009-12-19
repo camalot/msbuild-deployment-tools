@@ -29,7 +29,11 @@ namespace MSBuild.Deployment.Tasks {
 			/// <summary>
 			/// 
 			/// </summary>
-			Stable
+			Stable,
+			/// <summary>
+			/// 
+			/// </summary>
+			Planning
 		}
 
 		/// <summary>

@@ -88,12 +88,12 @@
     <Compile Include="..\3rdParty\CodePlexApi.cs">
       <Link>Services\CodePlexApi.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\AssemblyVersionInfo.cs" Condition="Exists('..\Shared\AssemblyVersionInfo.cs')">
-      <Link>Properties\AssemblyVersionInfo.cs</Link>
-    </Compile>
     <Compile Include="..\Shared\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+		<Compile Include="..\Shared\AssemblyVersionInfo.cs" Condition="Exists('..\Shared\AssemblyVersionInfo.cs')">
+			<Link>Properties\AssemblyVersionInfo.cs</Link>
+		</Compile>
     <Compile Include="CodePlexCreateRelease.cs" />
     <Compile Include="CodePlexUpload.cs" />
     <Compile Include="GoogleCodeUpload.cs" />

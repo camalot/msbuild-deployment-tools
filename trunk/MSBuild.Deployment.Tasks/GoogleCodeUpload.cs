@@ -97,6 +97,8 @@ namespace MSBuild.Deployment.Tasks {
 		/// <value>The timeout in seconds.</value>
 		public int Timeout { get; set; }
 
+		[Output]
+		public string FileUrl { get; set; }
 
 		/// <summary>
 		/// Executes this instance.
@@ -196,7 +198,8 @@ namespace MSBuild.Deployment.Tasks {
 			}
 
 			req.GetResponse ( );
-
+			FileUrl = string.Concat ( string.Format ( BASEURL, Project ), "/", TargetFile );
+			Log.LogMessage ( "Download url: {0}", FileUrl );
 		}
 
 		/// <summary>
@@ -214,7 +217,7 @@ namespace MSBuild.Deployment.Tasks {
 			}
 
 			using ( FileStream fileStream = new FileStream ( File, FileMode.Open ) ) {
-				byte[] buffer = new byte[ 1024 ];
+				byte[] buffer = new byte[1024];
 				int count = 0;
 				while ( ( count = fileStream.Read ( buffer, 0, buffer.Length ) ) > 0 ) {
 					outStream.Write ( buffer, 0, count );
