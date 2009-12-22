@@ -57,6 +57,14 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HgCo.WindowsLive.SkyDriveWebClient, Version=0.8.8.29810, Culture=neutral, PublicKeyToken=956852a28dcd1e2b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\skydrive\HgCo.WindowsLive.SkyDriveWebClient.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.3.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\skydrive\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Build.Engine" />
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Tasks" />
@@ -91,15 +99,20 @@
     <Compile Include="..\Shared\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-		<Compile Include="..\Shared\AssemblyVersionInfo.cs" Condition="Exists('..\Shared\AssemblyVersionInfo.cs')">
-			<Link>Properties\AssemblyVersionInfo.cs</Link>
-		</Compile>
+    <Compile Include="..\Shared\AssemblyVersionInfo.cs" Condition="Exists('..\Shared\AssemblyVersionInfo.cs')">
+      <Link>Properties\AssemblyVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="CodePlexCreateRelease.cs" />
     <Compile Include="CodePlexUpload.cs" />
     <Compile Include="GoogleCodeUpload.cs" />
     <Compile Include="IProxyTask.cs" />
+    <Compile Include="ITimeoutTask.cs" />
+    <Compile Include="MimeType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CodePlexServiceBindings.cs" />
+    <Compile Include="SkyDriveCreateRelease.cs" />
+    <Compile Include="SkyDriveUpload.cs" />
+    <Compile Include="TaskUserAgent.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

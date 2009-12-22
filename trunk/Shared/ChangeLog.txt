@@ -1,0 +1,14 @@
+Changelog 1.1.0.0
+	* Skydrive tasks added. Makes use of SkyDrive .Net API Client (http://skydriveapiclient.codeplex.com/)
+	* Changed the Useragent string so it creates it automatically using the Type.Name.
+	* An extension method for typeof Task was created to get the user agent string.
+	* Create a mimetype class that will attempt to get the mimetype the same way Internet Explorer does, if
+		the "default" mimetype is returned from that, it will attempt to get the mimetype from the registry.
+	* The codeplex upload and google code upload tasks now properly report the mimetype of the file being uploaded.
+	
+
+Changelog 1.0.0.0
+	* Initial release
+	* Contains CodePlexCreateRelease Task
+	* Contains CodePlexUpload Task
+	* Contains GoogleCodeUpload Task

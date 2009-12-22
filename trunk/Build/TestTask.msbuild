@@ -6,6 +6,26 @@
 
 	</Target>
 
+	<Target Name="SkyDrive">
+		<SkyDriveCreateRelease
+			Username=""
+			Password=""
+			Project=""
+			Version="1.1.0.0"
+			
+			ShareType="Public">
+			<Output PropertyName="ReleasePath" TaskParameter="ReleasePath"/>
+		</SkyDriveCreateRelease>
+
+		<SkyDriveUpload
+			Username=""
+			Password=""
+			ReleasePath="$(ReleasePath)"
+			File="$(MSBuildProjectFile)">
+
+		</SkyDriveUpload>
+	</Target>
+
 	<Target Name="CodePlexRelease">
 		<CodePlexCreateRelease
 				Project=""

@@ -13,7 +13,7 @@ namespace MSBuild.Deployment.Tasks {
 	/// <summary>
 	/// Creates a release on a codeplex project site
 	/// </summary>
-	public class CodePlexCreateRelease : Task, IProxyTask {
+	public class CodePlexCreateRelease : Task, IProxyTask, ITimeoutTask {
 		/// <summary>
 		/// 
 		/// </summary>
@@ -143,11 +143,16 @@ namespace MSBuild.Deployment.Tasks {
 		[Output]
 		public int ReleaseId { get; set; }
 
+
+		#region ITimeoutTask Members
+
 		/// <summary>
 		/// Gets or sets the timeout in seconds.
 		/// </summary>
 		/// <value>The timeout in seconds.</value>
 		public int Timeout { get; set; }
+
+		#endregion
 
 		/// <summary>
 		/// Executes this instance.
@@ -189,7 +194,7 @@ namespace MSBuild.Deployment.Tasks {
 
 		private void CreateRelease ( ) {
 			ReleaseService service = new ReleaseService ( );
-			service.UserAgent = String.Format ( "MSBuild Deployment Tasks (CodePlexCreateRelease) {0}", Assembly.GetExecutingAssembly ( ).GetName ( ).Version.ToString ( ) );
+			service.UserAgent = this.GetUserAgent ( );
 			service.Timeout = Timeout * 1000;
 
 			if ( !string.IsNullOrEmpty(ProxyHost) ) {
@@ -230,6 +235,14 @@ namespace MSBuild.Deployment.Tasks {
 		/// </summary>
 		/// <value>The proxy password.</value>
 		public string ProxyPassword { get; set; }
+
+		#endregion
+
+		#region IUserAgentTask Members
+
+		public string UserAgent {
+			get { throw new NotImplementedException ( ); }
+		}
 
 		#endregion
 	}

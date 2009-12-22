@@ -12,18 +12,24 @@ namespace MSBuild.Deployment.Tasks {
 	/// <summary>
 	/// Uploads a file to the google code project site.
 	/// </summary>
-	public class GoogleCodeUpload : Task, IProxyTask {
+	public class GoogleCodeUpload : Task, IProxyTask, ITimeoutTask {
 
 		/// <summary>
 		/// A Boundry Value
 		/// </summary>
 		private static readonly string BOUNDARY = Guid.NewGuid ( ).ToString ( );
+		/// <summary>
+		/// 
+		/// </summary>
 		private static readonly byte[] NEWLINE = Encoding.ASCII.GetBytes ( "\r\n" );
 
 		/// <summary>
 		/// Base Url
 		/// </summary>
 		private const string BASEURL = "https://{0}.googlecode.com/files";
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GoogleCodeUpload"/> class.
+		/// </summary>
 		public GoogleCodeUpload ( ) {
 			ProxyPort = 8080;
 			Timeout = 5 * 60;
@@ -91,14 +97,23 @@ namespace MSBuild.Deployment.Tasks {
 		/// <value>The proxy password.</value>
 		public string ProxyPassword { get; set; }
 
+
+		#region ITimeoutTask Members
+
 		/// <summary>
 		/// Gets or sets the timeout in seconds.
 		/// </summary>
 		/// <value>The timeout in seconds.</value>
 		public int Timeout { get; set; }
 
+		#endregion
+
+		/// <summary>
+		/// Gets or sets the file URL.
+		/// </summary>
+		/// <value>The file URL.</value>
 		[Output]
-		public string FileUrl { get; set; }
+		public string FileUrl { get; private set; }
 
 		/// <summary>
 		/// Executes this instance.
@@ -152,7 +167,7 @@ namespace MSBuild.Deployment.Tasks {
 			HttpWebRequest req = HttpWebRequest.Create ( String.Format ( BASEURL, Project ) ) as HttpWebRequest;
 			req.Method = "POST";
 			req.ContentType = String.Concat ( "multipart/form-data; boundary=" + BOUNDARY );
-			req.UserAgent = String.Format ( "MSBuild Deployment Tasks (GoogleCodeUpload) {0}", Assembly.GetExecutingAssembly ( ).GetName ( ).Version.ToString ( ) );
+			req.UserAgent = this.GetUserAgent ( );
 			req.Headers.Add ( "Authorization", String.Format ( "Basic {0}", CreateAuthorizationToken ( Username, Password ) ) );
 			req.Timeout = Timeout * 1000;
 
@@ -190,7 +205,7 @@ namespace MSBuild.Deployment.Tasks {
 
 				WriteLine ( strm, String.Concat ( "--", BOUNDARY ) );
 				WriteLine ( strm, String.Format ( @"content-disposition: form-data; name=""filename""; filename=""{0}""", TargetFile ) );
-				WriteLine ( strm, "Content-Type: application/octet-stream" );
+				WriteLine ( strm, string.Format ( "Content-Type: {0}", MimeType.Create ( new FileInfo ( File ) ).ContentType ) );
 				WriteLine ( strm, "" );
 				WriteFile ( strm, File );
 				WriteLine ( strm, "" );
@@ -217,7 +232,7 @@ namespace MSBuild.Deployment.Tasks {
 			}
 
 			using ( FileStream fileStream = new FileStream ( File, FileMode.Open ) ) {
-				byte[] buffer = new byte[1024];
+				byte[] buffer = new byte[ 1024 ];
 				int count = 0;
 				while ( ( count = fileStream.Read ( buffer, 0, buffer.Length ) ) > 0 ) {
 					outStream.Write ( buffer, 0, count );
@@ -259,5 +274,13 @@ namespace MSBuild.Deployment.Tasks {
 		}
 
 
+
+		#region IUserAgentTask Members
+
+		public string UserAgent {
+			get { throw new NotImplementedException ( ); }
+		}
+
+		#endregion
 	}
 }

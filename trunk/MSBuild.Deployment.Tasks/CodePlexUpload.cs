@@ -12,7 +12,7 @@ namespace MSBuild.Deployment.Tasks {
 	/// <summary>
 	/// Uploads a file to a codeplex project
 	/// </summary>
-	public class CodePlexUpload : Task, IProxyTask {
+	public class CodePlexUpload : Task, IProxyTask, ITimeoutTask {
 
 		/// <summary>
 		/// 
@@ -93,11 +93,16 @@ namespace MSBuild.Deployment.Tasks {
 		/// <value>The type of the resource.</value>
 		private FileResourceType ResourceType { get; set; }
 
+
+		#region ITimeoutTask Members
+
 		/// <summary>
 		/// Gets or sets the timeout in seconds.
 		/// </summary>
 		/// <value>The timeout in seconds.</value>
 		public int Timeout { get; set; }
+
+		#endregion
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this instance is recommended.
@@ -157,7 +162,7 @@ namespace MSBuild.Deployment.Tasks {
 		private void Upload ( ) {
 			ReleaseService service = new ReleaseService ( );
 			service.Timeout = Timeout * 1000;
-			service.UserAgent = String.Format ( "MSBuild Deployment Tasks (CodePlexUpload) {0}", Assembly.GetExecutingAssembly ( ).GetName ( ).Version.ToString ( ) );
+			service.UserAgent = this.GetUserAgent();
 			if ( !string.IsNullOrEmpty ( ProxyHost ) ) {
 				service.Proxy = new WebProxy ( ProxyHost, ProxyPort );
 				( service.Proxy as WebProxy ).BypassProxyOnLocal = true;
@@ -183,6 +188,7 @@ namespace MSBuild.Deployment.Tasks {
 			rfile.Name = Path.GetFileNameWithoutExtension ( File );
 			rfile.FileName = File;
 			rfile.FileType = ResourceType.ToString ( );
+			rfile.MimeType = MimeType.Create ( new FileInfo ( File ) ).ContentType;
 			rfile.FileData = data;
 
 			service.UploadTheReleaseFiles ( Project, ReleaseName, new ReleaseFile[] { rfile },
@@ -217,5 +223,7 @@ namespace MSBuild.Deployment.Tasks {
 		public string ProxyPassword { get; set; }
 
 		#endregion
+
+
 	}
 }

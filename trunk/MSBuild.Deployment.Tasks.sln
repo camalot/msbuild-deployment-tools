@@ -12,47 +12,87 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{153BD958
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rdParty", "3rdParty", "{9EDF4B45-EAB2-4DCA-8692-40787BC018A9}"
 	ProjectSection(SolutionItems) = preProject
-		3rdParty\CodePlex.ReleaseService.config = 3rdParty\CodePlex.ReleaseService.config
-		3rdParty\CodePlex.ReleaseService.cs = 3rdParty\CodePlex.ReleaseService.cs
 		3rdParty\CodePlex.ReleaseService.wsdl = 3rdParty\CodePlex.ReleaseService.wsdl
 		3rdParty\CodePlexApi.cs = 3rdParty\CodePlexApi.cs
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{FD03EC73-07E3-48E7-BA20-296495AB37F7}"
 	ProjectSection(SolutionItems) = preProject
+		Shared\ChangeLog.txt = Shared\ChangeLog.txt
 		Shared\license.rtf = Shared\license.rtf
 		Shared\License.txt = Shared\License.txt
 		Shared\SharedAssemblyInfo.cs = Shared\SharedAssemblyInfo.cs
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "skydrive", "skydrive", "{7837E3EE-B23A-4BB9-B538-9CDC43E0683D}"
+	ProjectSection(SolutionItems) = preProject
+		3rdParty\skydrive\HgCo.WindowsLive.SkyDriveWebClient.dll = 3rdParty\skydrive\HgCo.WindowsLive.SkyDriveWebClient.dll
+		3rdParty\skydrive\HgCo.WindowsLive.SkyDriveWebClient.XML = 3rdParty\skydrive\HgCo.WindowsLive.SkyDriveWebClient.XML
+		3rdParty\skydrive\HtmlAgilityPack.dll = 3rdParty\skydrive\HtmlAgilityPack.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit", "xunit", "{B4ACD34A-CD9B-4644-8440-961BD73C35F2}"
+	ProjectSection(SolutionItems) = preProject
+		3rdParty\xunit\xunit.dll = 3rdParty\xunit\xunit.dll
+		3rdParty\xunit\xunit.pdb = 3rdParty\xunit\xunit.pdb
+		3rdParty\xunit\xunit.xml = 3rdParty\xunit\xunit.xml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MdtTests", "MdtTests\MdtTests.csproj", "{3A1AB720-30A0-4B8D-98D1-AE5D9B9A46CE}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
+		SccNumberOfProjects = 3
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs02.codeplex.com/
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = MSBuild.Deployment.Tasks\\MSBuild.Deployment.Tasks.csproj
 		SccProjectName1 = MSBuild.Deployment.Tasks
 		SccLocalPath1 = MSBuild.Deployment.Tasks
+		SccProjectUniqueName2 = MdtTests\\MdtTests.csproj
+		SccProjectName2 = MdtTests
+		SccLocalPath2 = MdtTests
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Debug|x64.ActiveCfg = Debug|x64
 		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Debug|x86.ActiveCfg = Debug|x86
 		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Debug|x86.Build.0 = Debug|x86
 		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Release|Any CPU.ActiveCfg = Release|x86
+		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Release|Mixed Platforms.Build.0 = Release|x86
 		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Release|x64.ActiveCfg = Release|x64
 		{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}.Release|x86.ActiveCfg = Release|x86
+		{3A1AB720-30A0-4B8D-98D1-AE5D9B9A46CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A1AB720-30A0-4B8D-98D1-AE5D9B9A46CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A1AB720-30A0-4B8D-98D1-AE5D9B9A46CE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3A1AB720-30A0-4B8D-98D1-AE5D9B9A46CE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3A1AB720-30A0-4B8D-98D1-AE5D9B9A46CE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3A1AB720-30A0-4B8D-98D1-AE5D9B9A46CE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3A1AB720-30A0-4B8D-98D1-AE5D9B9A46CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A1AB720-30A0-4B8D-98D1-AE5D9B9A46CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A1AB720-30A0-4B8D-98D1-AE5D9B9A46CE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3A1AB720-30A0-4B8D-98D1-AE5D9B9A46CE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3A1AB720-30A0-4B8D-98D1-AE5D9B9A46CE}.Release|x64.ActiveCfg = Release|Any CPU
+		{3A1AB720-30A0-4B8D-98D1-AE5D9B9A46CE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7837E3EE-B23A-4BB9-B538-9CDC43E0683D} = {9EDF4B45-EAB2-4DCA-8692-40787BC018A9}
+		{B4ACD34A-CD9B-4644-8440-961BD73C35F2} = {9EDF4B45-EAB2-4DCA-8692-40787BC018A9}
 	EndGlobalSection
 EndGlobal
