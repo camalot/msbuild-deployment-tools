@@ -3,7 +3,7 @@
 	<PropertyGroup>
 
 		<SharedProperties>SharedProperties</SharedProperties>
-		<CCNetLabel Condition="'$(CCNetLabel)' == ''">1.1.0.0</CCNetLabel>
+		<CCNetLabel Condition="'$(CCNetLabel)' == ''">1.2.0.0</CCNetLabel>
 
 		<Configuration Condition="'$(CCNetBuildCondition)' == 'ForceBuild'">Release</Configuration>
 		<Configuration Condition="'$(CCNetBuildCondition)' != 'ForceBuild'">Debug</Configuration>

@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5" DefaultTargets="Build">
-	<Import Project="..\bin\Debug\1.0.0.0\Binary\x86\MSBuild.Deployment.Tasks.Targets"/>
+	<Import Project="..\bin\Debug\1.2.0.0\Binary\x86\MSBuild.Deployment.Tasks.Targets"/>
 
+	<PropertyGroup>
+		<InputFile>$(MSBuildProjectDirectory)\BuildTasks.msbuild</InputFile>		
+	</PropertyGroup>
 	<Target Name="Build">
 
+	</Target>
+
+	<Target Name="ReadFile">
+		<ReadTextFile Files="$(InputFile)">
+			<Output PropertyName="OutputText" TaskParameter="OutputText" />
+		</ReadTextFile>
+
+		<Message Text="Output = $(OutputText)" />
 	</Target>
 
 	<Target Name="SkyDrive">
 		<SkyDriveCreateRelease
 			Username=""
 			Password=""
-			Project=""
+			Project="Test"
 			Version="1.1.0.0"
 			
-			ShareType="Public">
+			ShareType="Private">
 			<Output PropertyName="ReleasePath" TaskParameter="ReleasePath"/>
 		</SkyDriveCreateRelease>
 
@@ -21,9 +32,13 @@
 			Username=""
 			Password=""
 			ReleasePath="$(ReleasePath)"
-			File="$(MSBuildProjectFile)">
-
+			File="$(MSBuildProjectDirectory)\BuildTasks.msbuild">
+			<Output PropertyName="DownloadUrl" TaskParameter="DownloadUrl"/>
+			<Output PropertyName="PathUrl" TaskParameter="PathUrl"/>
 		</SkyDriveUpload>
+
+		<Message Text="$(DownloadUrl)" />
+		<Message Text="$(PathUrl)" />
 	</Target>
 
 	<Target Name="CodePlexRelease">

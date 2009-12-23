@@ -1,3 +1,6 @@
+Changelog 1.2.0.0
+	* Added a task to read text from a file. This can be used to create the descriptions for the releases, for example
+
 Changelog 1.1.0.0
 	* Skydrive tasks added. Makes use of SkyDrive .Net API Client (http://skydriveapiclient.codeplex.com/)
 	* Changed the Useragent string so it creates it automatically using the Type.Name.

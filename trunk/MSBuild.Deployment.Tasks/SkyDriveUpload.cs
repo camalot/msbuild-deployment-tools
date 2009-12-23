@@ -55,7 +55,12 @@ namespace MSBuild.Deployment.Tasks {
 		/// <value>The download URL.</value>
 		[Output]
 		public string DownloadUrl { get; private set; }
-
+		/// <summary>
+		/// Gets or sets the path URL.
+		/// </summary>
+		/// <value>The path URL.</value>
+		[Output]
+		public string PathUrl { get; private set; }
 		/// <summary>
 		/// Gets or sets the client.
 		/// </summary>
@@ -147,6 +152,7 @@ namespace MSBuild.Deployment.Tasks {
 
 			if ( uploadedFile != null ) {
 				DownloadUrl = uploadedFile.ViewUrl;
+				PathUrl = uploadedFile.PathUrl;
 				Client.ChangeWebFileDescription ( uploadedFile, string.Format ( "Uploaded by: {0}", this.GetUserAgent ( ) ) );
 				Log.LogMessage ( "Download url set: {0}", DownloadUrl );
 			} else {
