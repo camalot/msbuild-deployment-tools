@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5" DefaultTargets="Build">
-	<Import Project="..\bin\Debug\1.2.0.0\Binary\x86\MSBuild.Deployment.Tasks.Targets"/>
+	<Import Project="$(MSBuildProjectDirectory)\SharedProperties.msbuild" Condition=" Exists('$(MSBuildProjectDirectory)\SharedProperties.msbuild') AND $(SharedProperties) != 'SharedProperties' "/>
+	<Import Project="$(OutputPath)..\..\Binary\$(Platform)\MSBuild.Deployment.Tasks.Targets"/>
 
 	<PropertyGroup>
-		<InputFile>$(MSBuildProjectDirectory)\BuildTasks.msbuild</InputFile>		
+		<InputFile>$(MSBuildProjectDirectory)\BuildTasks.msbuild</InputFile>
 	</PropertyGroup>
+
 	<Target Name="Build">
 
+	</Target>
+
+	<Target Name="TweetIt">
+		<Tweet
+				Username=""
+				Password=""
+				Timeout="15"
+				Message="" />
+	</Target>
+
+	<Target Name="Bitly">
+		<BitlyUrl
+			Username=""
+			ApiKey=""
+			Url=""
+			TreatErrorsAsWarnings="True">
+			<Output PropertyName="ShortUrl" TaskParameter="OutputUrl" />
+		</BitlyUrl>
+		<Message Text="ShortUrl: $(ShortUrl)" />
 	</Target>
 
 	<Target Name="ReadFile">

@@ -16,7 +16,7 @@ namespace MSBuild.Deployment.Tasks {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class SkyDriveUpload : Task, IProxyTask, ITimeoutTask {
+	public class SkyDriveUpload : Task, IProxyTask, ITimeoutTask , ITreatErrorsAsWarningsTask{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SkyDriveUpload"/> class.
 		/// </summary>
@@ -94,8 +94,13 @@ namespace MSBuild.Deployment.Tasks {
 				}
 				return true;
 			} catch ( Exception ex ) {
-				Log.LogError ( ex.ToString ( ) );
-				return false;
+				if ( TreatErrorsAsWarnings ) {
+					Log.LogWarningFromException ( ex, true );
+					return true;
+				} else {
+					Log.LogErrorFromException ( ex, true );
+					return false;
+				}
 			}
 		}
 
@@ -128,7 +133,11 @@ namespace MSBuild.Deployment.Tasks {
 				}
 				return parent;
 			} else {
-				Log.LogError ( "Unable to locate root folder, cannot continue" );
+				if ( TreatErrorsAsWarnings ) {
+					Log.LogWarning ( "Unable to locate root folder, cannot continue" );
+				} else {
+					Log.LogError("Unable to locate root folder, cannot continue");
+				}
 				return null;
 			}
 		}
@@ -156,7 +165,11 @@ namespace MSBuild.Deployment.Tasks {
 				Client.ChangeWebFileDescription ( uploadedFile, string.Format ( "Uploaded by: {0}", this.GetUserAgent ( ) ) );
 				Log.LogMessage ( "Download url set: {0}", DownloadUrl );
 			} else {
-				Log.LogError ( "Unable to locate uplaoded file, cannot continue" );
+				if ( TreatErrorsAsWarnings ) {
+					Log.LogWarning ( "Unable to locate uplaoded file, cannot continue" );
+				} else {
+					Log.LogError ( "Unable to locate uplaoded file, cannot continue" );
+				}
 			}
 		}
 
@@ -185,5 +198,17 @@ namespace MSBuild.Deployment.Tasks {
 
 		#endregion
 
+
+		#region ITreatErrorsAsWarningsTask Members
+
+		/// <summary>
+		/// Gets or sets a value indicating whether to treat errors as warnings.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if treat errors as warnings; otherwise, <c>false</c>.
+		/// </value>
+		public bool TreatErrorsAsWarnings { get; set; }
+
+		#endregion
 	}
 }

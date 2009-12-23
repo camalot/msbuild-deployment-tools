@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 
 namespace MSBuild.Deployment.Tasks {
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface ITimeoutTask {
 
 		/// <summary>

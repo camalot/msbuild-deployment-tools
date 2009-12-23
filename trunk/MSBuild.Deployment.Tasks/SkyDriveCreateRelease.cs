@@ -17,7 +17,7 @@ namespace MSBuild.Deployment.Tasks {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class SkyDriveCreateRelease : Task, IProxyTask, ITimeoutTask  {
+	public class SkyDriveCreateRelease : Task, IProxyTask, ITimeoutTask, ITreatErrorsAsWarningsTask {
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SkyDriveCreateRelease"/> class.
@@ -110,7 +110,7 @@ namespace MSBuild.Deployment.Tasks {
 			SkyDriveWebClient client = new SkyDriveWebClient ( );
 			WebFolderInfo rootFolder = null;
 
-			client.Timeout = Timeout * 1000;		
+			client.Timeout = Timeout * 1000;
 
 			try {
 				client.LogOn ( this.Username, this.Password );
@@ -155,22 +155,33 @@ namespace MSBuild.Deployment.Tasks {
 							Log.LogMessage ( "Created Release Folder: {0}", ReleasePath );
 							return true;
 						} else {
-							Log.LogError ( "Unable to locate version folder, cannot continue" );
+							return LogErrorOrWarning ( "Unable to locate version folder, cannot continue" );
 						}
 					} else {
-						Log.LogError ( "Unable to locate project folder, cannot continue" );
+						return LogErrorOrWarning ( "Unable to locate project folder, cannot continue" );
 					}
 				} else {
-					Log.LogError ( "Unable to locate root folder, cannot continue" );
+					return LogErrorOrWarning ( "Unable to locate root folder, cannot continue" );
 				}
-				return false;
 			} catch ( Exception ex ) {
-				Log.LogError ( ex.ToString ( ) );
-				return false;
+				if ( TreatErrorsAsWarnings ) {
+					Log.LogWarningFromException ( ex, true );
+					return true;
+				} else {
+					Log.LogErrorFromException ( ex, true );
+					return false;
+				}
 			}
 		}
 
-
+		private bool LogErrorOrWarning ( string message ) {
+			if ( TreatErrorsAsWarnings ) {
+				Log.LogWarning ( message );
+			} else {
+				Log.LogError ( message );
+			}
+			return TreatErrorsAsWarnings;
+		}
 
 		#region IProxyTask Members
 
@@ -204,6 +215,18 @@ namespace MSBuild.Deployment.Tasks {
 		/// </summary>
 		/// <value>The timeout in seconds.</value>
 		public int Timeout { get; set; }
+
+		#endregion
+
+		#region ITreatErrorsAsWarningsTask Members
+
+		/// <summary>
+		/// Gets or sets a value indicating whether to treat errors as warnings.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if treat errors as warnings; otherwise, <c>false</c>.
+		/// </value>
+		public bool TreatErrorsAsWarnings { get; set; }
 
 		#endregion
 	}

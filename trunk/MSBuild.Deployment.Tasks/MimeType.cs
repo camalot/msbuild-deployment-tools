@@ -7,6 +7,9 @@ using System.IO;
 using Microsoft.Win32;
 
 namespace MSBuild.Deployment.Tasks {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class MimeType {
 		#region Win32Api
 		/// <summary>
@@ -167,7 +170,7 @@ namespace MSBuild.Deployment.Tasks {
 						return result;
 					}
 				}
-			} catch ( Exception ex ) {
+			} catch ( Exception ) {
 				return DefaultContentType;
 			}
 		}

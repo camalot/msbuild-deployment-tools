@@ -13,7 +13,9 @@ namespace MSBuild.Deployment.Tasks {
 	/// <summary>
 	/// Creates a release on a codeplex project site
 	/// </summary>
-	public class CodePlexCreateRelease : Task, IProxyTask, ITimeoutTask {
+	public class CodePlexCreateRelease : Task, IProxyTask, ITimeoutTask, ITreatErrorsAsWarningsTask {
+		private const string RELEASEURLFORMAT = "http://{0}.codeplex.com/Release/ProjectReleases.aspx?ReleaseId={1}";
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -90,16 +92,6 @@ namespace MSBuild.Deployment.Tasks {
 		[Required]
 		public String Version { get; set; }
 
-		/// <summary>
-		/// Gets or sets the name.
-		/// </summary>
-		/// <value>The name.</value>
-		[Output]
-		public string ReleaseName {
-			get {
-				return string.Format ( "{0} {1} {2}", ProjectFriendlyName, Version, ReleaseStatus.ToString ( ) );
-			}
-		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this instance is default release.
@@ -143,6 +135,27 @@ namespace MSBuild.Deployment.Tasks {
 		[Output]
 		public int ReleaseId { get; set; }
 
+		/// <summary>
+		/// Gets or sets the name.
+		/// </summary>
+		/// <value>The name.</value>
+		[Output]
+		public string ReleaseName {
+			get {
+				return string.Format ( "{0} {1} {2}", ProjectFriendlyName, Version, ReleaseStatus.ToString ( ) );
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the release URL.
+		/// </summary>
+		/// <value>The release URL.</value>
+		[Output]
+		public string ReleaseUrl {
+			get {
+				return string.Format ( RELEASEURLFORMAT, Project, ReleaseId );
+			}
+		}
 
 		#region ITimeoutTask Members
 
@@ -187,8 +200,19 @@ namespace MSBuild.Deployment.Tasks {
 				Log.LogMessage ( "Successfully created release: {0} ({1})", ReleaseName, ReleaseId );
 				return true;
 			} catch ( Exception ex ) {
-				Log.LogError ( ex.ToString ( ) );
-				return false;
+				// ignore the "already exists" exception
+				if ( string.Compare ( string.Format ( "The release '{0}' already exists.", ReleaseName ), ex.Message, true ) == 0 ) {
+					Log.LogWarning ( ex.Message );
+					return true;
+				} else {
+					if ( TreatErrorsAsWarnings ) {
+						Log.LogWarningFromException ( ex, true );
+						return true;
+					} else {
+						Log.LogErrorFromException ( ex, true );
+						return false;
+					}
+				}
 			}
 		}
 
@@ -238,11 +262,17 @@ namespace MSBuild.Deployment.Tasks {
 
 		#endregion
 
-		#region IUserAgentTask Members
 
-		public string UserAgent {
-			get { throw new NotImplementedException ( ); }
-		}
+
+		#region ITreatErrorsAsWarningsTask Members
+
+		/// <summary>
+		/// Gets or sets a value indicating whether to treat errors as warnings.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if treat errors as warnings; otherwise, <c>false</c>.
+		/// </value>
+		public bool TreatErrorsAsWarnings { get; set; }
 
 		#endregion
 	}

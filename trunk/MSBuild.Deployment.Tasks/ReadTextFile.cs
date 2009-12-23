@@ -15,7 +15,7 @@ namespace MSBuild.Deployment.Tasks {
 	///		<Output PropertyName="OutputText" TaskParameter="OutputText" />
 	/// </ReadTextFile>
 	/// </example>
-	public class ReadTextFile : Task {
+	public class ReadTextFile : Task, ITreatErrorsAsWarningsTask {
 		/// <summary>
 		/// Gets or sets the files.
 		/// </summary>
@@ -51,7 +51,6 @@ namespace MSBuild.Deployment.Tasks {
 								}
 							}
 						}
-						Log.LogMessage ( "Added data to array" );
 						outData.Add(data.ToString());
 					}
 				}
@@ -59,9 +58,26 @@ namespace MSBuild.Deployment.Tasks {
 				OutputText = outData.ToArray ( );
 				return true;
 			} catch ( Exception ex ) {
-				Log.LogError ( ex.ToString ( ) );
-				return false;
+				if ( TreatErrorsAsWarnings ) {
+					Log.LogWarningFromException ( ex, true );
+					return true;
+				} else {
+					Log.LogErrorFromException ( ex, true );
+					return false;
+				}
 			}
 		}
+
+		#region ITreatErrorsAsWarningsTask Members
+
+		/// <summary>
+		/// Gets or sets a value indicating whether to treat errors as warnings.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if treat errors as warnings; otherwise, <c>false</c>.
+		/// </value>
+		public bool TreatErrorsAsWarnings { get; set; }
+
+		#endregion
 	}
 }

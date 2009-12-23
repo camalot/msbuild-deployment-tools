@@ -82,6 +82,7 @@
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -102,18 +103,23 @@
     <Compile Include="..\Shared\AssemblyVersionInfo.cs" Condition="Exists('..\Shared\AssemblyVersionInfo.cs')">
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="BitlyUrl.cs" />
     <Compile Include="CodePlexCreateRelease.cs" />
     <Compile Include="CodePlexUpload.cs" />
     <Compile Include="GoogleCodeUpload.cs" />
     <Compile Include="IProxyTask.cs" />
     <Compile Include="ITimeoutTask.cs" />
+    <Compile Include="ITreatErrorsAsWarningsTask.cs" />
     <Compile Include="MimeType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadTextFile.cs" />
-    <Compile Include="Services\CodePlexServiceBindings.cs" />
+    <Compile Include="Services\BitlyResult.cs" />
+    <Compile Include="Services\BitlyService.cs" />
+    <Compile Include="Services\Twitter.cs" />
     <Compile Include="SkyDriveCreateRelease.cs" />
     <Compile Include="SkyDriveUpload.cs" />
     <Compile Include="TaskUserAgent.cs" />
+    <Compile Include="Tweet.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

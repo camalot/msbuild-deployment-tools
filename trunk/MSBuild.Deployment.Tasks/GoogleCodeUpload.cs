@@ -12,7 +12,7 @@ namespace MSBuild.Deployment.Tasks {
 	/// <summary>
 	/// Uploads a file to the google code project site.
 	/// </summary>
-	public class GoogleCodeUpload : Task, IProxyTask, ITimeoutTask {
+	public class GoogleCodeUpload : Task, IProxyTask, ITimeoutTask, ITreatErrorsAsWarningsTask {
 
 		/// <summary>
 		/// A Boundry Value
@@ -154,8 +154,13 @@ namespace MSBuild.Deployment.Tasks {
 				Log.LogMessage ( "Upload Task completed successfully" );
 				return true;
 			} catch ( Exception ex ) {
-				Log.LogError ( ex.ToString ( ) );
-				return false;
+				if ( TreatErrorsAsWarnings ) {
+					Log.LogWarningFromException ( ex, true );
+					return true;
+				} else {
+					Log.LogErrorFromException ( ex, true );
+					return false;
+				}
 			}
 		}
 
@@ -273,13 +278,15 @@ namespace MSBuild.Deployment.Tasks {
 			return Convert.ToBase64String ( Encoding.ASCII.GetBytes ( String.Format ( "{0}:{1}", username, password ) ) );
 		}
 
+		#region ITreatErrorsAsWarningsTask Members
 
-
-		#region IUserAgentTask Members
-
-		public string UserAgent {
-			get { throw new NotImplementedException ( ); }
-		}
+		/// <summary>
+		/// Gets or sets a value indicating whether to treat errors as warnings.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if treat errors as warnings; otherwise, <c>false</c>.
+		/// </value>
+		public bool TreatErrorsAsWarnings { get; set; }
 
 		#endregion
 	}
