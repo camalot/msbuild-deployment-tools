@@ -1,8 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuild.Deployment.Tasks", "MSBuild.Deployment.Tasks\MSBuild.Deployment.Tasks.csproj", "{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{153BD958-E0B7-4E4D-9829-9C22FEA49323}"
 	ProjectSection(SolutionItems) = preProject
 		Build\BuildTasks.msbuild = Build\BuildTasks.msbuild
@@ -37,6 +35,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit", "xunit", "{B4ACD34A
 		3rdParty\xunit\xunit.pdb = 3rdParty\xunit\xunit.pdb
 		3rdParty\xunit\xunit.xml = 3rdParty\xunit\xunit.xml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuild.Deployment.Tasks", "MSBuild.Deployment.Tasks\MSBuild.Deployment.Tasks.csproj", "{74D36DCE-17E7-43B5-BBAE-B5C1F4B1B16C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MdtTests", "MdtTests\MdtTests.csproj", "{3A1AB720-30A0-4B8D-98D1-AE5D9B9A46CE}"
 EndProject
