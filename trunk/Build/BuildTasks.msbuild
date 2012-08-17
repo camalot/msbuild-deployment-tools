@@ -16,7 +16,6 @@
 	</Target>
 
 	<Target Name="BuildPublish" Condition=" '$(PublishTarget)' == 'PublishTarget' AND  '$(ReleaseMode)' != 'Binary'">
-		<Message Text="Publishing Build" Importance="high" />
 		<CallTarget Targets="Publish" />
 	</Target>
 
